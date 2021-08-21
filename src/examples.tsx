@@ -24,7 +24,19 @@ function roundValues(obj: Record<string, number>) {
 
   return output;
 }
-
+function pz(n: number, z = 4, s = "0") {
+  console.log(n);
+  function rpt(z: number, s: string) {
+    let acc = "";
+    for (let i = 0; i < z; i++) acc += s;
+    return acc;
+  }
+  // var z = z || 2,
+  //   s = s || "0";
+  if ((n + "").length <= z)
+    return ["", "-"][+(n < 0)] + (rpt(z, s) + Math.abs(n)).slice(-1 * z);
+  else return n + "";
+}
 export const ExampleWrapper = (props: PropsWithChildren<unknown>) => {
   const [showExample, setShowExample] = useState(false);
 
@@ -43,6 +55,10 @@ export const UsePanExample = () => {
   const [viewport, setViewport] = useState(pointUtils.ORIGIN);
   const [offset, startPan] = usePan();
 
+  useEffect(() => {
+    console.log("viewport value caused render");
+  }, [viewport]);
+
   return (
     <div
       className="select-none bg-gray-500 overflow-hidden flex justify-center items-center  w-screen h-screen bz-50 relative "
@@ -56,22 +72,33 @@ export const UsePanExample = () => {
       <button
         onClick={(e) => {
           e.preventDefault();
-          console.log(viewport);
+
+          setViewport(() => ({
+            x: 0 - offset.x,
+            y: 0 - offset.y
+          }));
+        }}
+        className="hover:cursor-pointer text-white z-50 py-1 px-3 rounded border block m-2 bg-gray-900 absolute bottom-12 right-0 "
+      >
+        Reset {"↺"}
+      </button>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+
           setViewport((viewport) => ({
             x: viewport.x + 300,
             y: viewport.y + 0
           }));
         }}
-        className="hover:cursor-pointer z-50 py-1 px-3 rounded border block m-2 bg-gray-900 absolute bottom-0 right-0 "
+        className="hover:cursor-pointer text-white z-50 py-1 px-3 rounded border block m-2 bg-gray-900 absolute bottom-0 right-0 "
       >
-        Pan To!
+        Viewport Right {"→"}
       </button>
+
       <div
         onMouseDown={startPan}
         className="select-none overflow-hidden flex justify-center items-center w-screen h-screen shadow-inner border border-gray-600 text-gray-50 relative"
-        // style={{
-        //   transform: `translate(${viewport.x}px, ${viewport.y}px)`
-        // }}
       >
         <div
           className="border-4 border-gray-100 border-opacity-50 text-center pt-10 text-gray-700 shadow-lg rounded text-4xl uppercase font-black absolute block bg-gray-400 w-32 h-32 cursor-pointer"
@@ -83,20 +110,26 @@ export const UsePanExample = () => {
           hi
         </div>
         <div
-          className="border-4 border-gray-100 border-opacity-50 text-center pt-10 text-gray-700 shadow-lg rounded text-4xl uppercase font-black absolute block bg-gray-400 w-32 h-32 cursor-pointer"
+          className="border-4 border-gray-100 border-opacity-50  pt-10 text-gray-700 shadow-lg rounded text-xl uppercase absolute block bg-gray-400 font-mono w-32 h-32 cursor-pointer"
           style={{
             top: `${100 - roundValues(offset).y - viewport.y}px`,
             left: `${500 - roundValues(offset).x - viewport.x}px`
           }}
         >
-          hi2
+          x: {false && pz(500 - roundValues(offset).x - viewport.x, 5)}
+          <br />
+          y:{" "}
+          {false &&
+            (100 - roundValues(offset).y - viewport.y < 0
+              ? pz(100 - roundValues(offset).y - viewport.y, 4)
+              : pz(100 - roundValues(offset).y - viewport.y, 5))}
         </div>
         <dl className="w-64 font-sans grid grid-cols-2 absolute bottom-2 left-2">
           <dt>Offset:</dt>
           <dd className="inline-block">
             {JSON.stringify(roundValues(offset))}
           </dd>
-          <dt>viewpvort:</dt>
+          <dt>Viewport:</dt>
           <dd className="inline-block">
             {JSON.stringify(roundValues(viewport))}
           </dd>
