@@ -21,8 +21,8 @@
     "serve": "vite preview"
   },
   "keywords": [],
-  "name": "react-vite-ts-hmr-fix",
-  "description": "Fixes issues with vite / react HMR / tailwind / ts... I think.",
+  "name": "react-pan",
+  "description": "",
   "license": "MIT",
   "private": true
 }
