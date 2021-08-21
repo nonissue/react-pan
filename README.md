@@ -2,5 +2,5 @@
 
 Created with CodeSandbox
 
-SOURCE:
+SOURCE / Inspo:
 https://www.jclem.net
